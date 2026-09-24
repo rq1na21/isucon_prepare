@@ -12,6 +12,15 @@
 - [ ] snippets の pprof を埋め込む
 - [ ] `make bench-prep` → ベンチ → `make alp` / `make slow` / `make pprof`
 
+## 以降のループ
+1. `make alp` / `make slow` / `make pprof` で遅い所を特定
+2. 手元で直して commit & push
+3. デプロイする
+   - 1台: サーバーで `make deploy-app` (アプリのみ。mysql を落とさない)
+   - 複数台: 手元で `make deploy-app-all`
+   - `conf/` の設定を変えた時だけ `make deploy` / `make deploy-all`
+4. `make bench-prep` → ベンチ → スコアを記録
+
 ## よく効く改善
 - インデックス追加 (`make slow` の上位から)
 - N+1 解消 (JOIN / IN 句 / キャッシュ)
@@ -19,6 +28,19 @@
 - `InterpolateParams=true`、コネクションプールの調整
 - 変わらないデータはメモリにキャッシュ (`sync.Map` / mutex + map)
 - DB を別サーバーへ分離
+
+## 複数台に分ける時
+- [ ] Makefile の `APP_HOSTS` / `ALL_HOSTS` / `REPO_DIR` を埋める (ssh config の名前と揃える)
+- [ ] 全サーバーで deploy key を作り、リポジトリを clone
+- [ ] 役割が違うホストは `conf/<hostname>/vars.mk` で `RESTART` を絞る
+      - DB 専用: `RESTART := mysql`
+      - アプリ専用: `RESTART := $(SERVICE)`
+- [ ] 各サーバーで `make collect` → 1台ずつ commit (同時にやると衝突する)
+- [ ] アプリの接続先 DB ホストを書き換える (localhost のままになりがち)
+- [ ] ログの在り処に注意
+      - `make alp` は nginx のいるホスト
+      - `make slow` は mysql のいるホスト
+      - `make bench-prep` も両方で叩く
 
 ## 終了前
 - [ ] slow log、アクセスログ、pprof を外す
@@ -28,4 +50,3 @@
 ## 未対応 (必要になったら追加)
 - ssh config: 当日 IP が決まってから書く
 - pprotein / netdata: alp + pt-query-digest + pprof で足りない時に
-- 複数台への一括 deploy: DB 分離時に `ssh isu2 make deploy` 等を足す
