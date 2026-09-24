@@ -1,0 +1,12 @@
+# /etc/mysql/mysql.conf.d/mysqld.cnf の [mysqld] に追記
+[mysqld]
+slow_query_log      = 1
+slow_query_log_file = /var/log/mysql/mysql-slow.log
+long_query_time     = 0
+
+# メモリの 7 割程度が目安
+innodb_buffer_pool_size = 1G
+max_connections         = 1000
+# 終盤: 書き込み時の fsync を減らす
+# innodb_flush_log_at_trx_commit = 2
+# disable-log-bin
