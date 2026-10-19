@@ -1,0 +1,8 @@
+# alp の設定 (make alp で使う)。https://github.com/tkuchiki/alp/blob/main/example/config.yml
+sort: sum
+reverse: true
+output: count,2xx,4xx,5xx,method,uri,min,p50,p99,max,sum
+percentiles: [50, 99]
+# 当日、ID などを含むパスをまとめる
+matching_groups:
+  - '^/api/user/[0-9a-zA-Z]+$'

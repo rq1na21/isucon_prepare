@@ -10,7 +10,8 @@
 - [ ] Makefile 先頭の変数 (SERVICE, APP_DIR, BIN) を書き換え
 - [ ] templates/ の nginx ログ形式・slow log を反映 → `make deploy`
 - [ ] snippets の pprof を埋め込む
-- [ ] `make bench-prep` → ベンチ → `make alp` / `make slow` / `make pprof`
+- [ ] alp.yml の matching_groups をアプリのパスに合わせる
+- [ ] `make bench-prep` → ベンチ → `make alp` / `make slow` (または `make sql-stats`) / `make pprof`
 
 ## 以降のループ
 1. `make alp` / `make slow` / `make pprof` で遅い所を特定
@@ -25,9 +26,10 @@
 - インデックス追加 (`make slow` の上位から)
 - N+1 解消 (JOIN / IN 句 / キャッシュ)
 - 静的ファイルを nginx から直接配信
-- `InterpolateParams=true`、コネクションプールの調整
+- `InterpolateParams=true`、コネクションプールの調整 (足りなければ `SetMaxOpenConns(512)` 程度まで)
+- Web フレームワークのリクエストログ (chi / echo の logger middleware) を外す
 - 変わらないデータはメモリにキャッシュ (`sync.Map` / mutex + map)
-- DB を別サーバーへ分離
+- DB を別サーバーへ分離 (使わないサーバーの mysql やアプリは `systemctl disable --now`)
 
 ## 複数台に分ける時
 - [ ] Makefile の `APP_HOSTS` / `ALL_HOSTS` / `REPO_DIR` を埋める (ssh config の名前と揃える)
