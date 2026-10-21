@@ -94,6 +94,6 @@ slow:
 sql-stats:
 	sudo mysql -E -e "SELECT DIGEST_TEXT, COUNT_STAR, ROUND(SUM_TIMER_WAIT/1e12,3) AS sum_sec, ROUND(AVG_TIMER_WAIT/1e12,4) AS avg_sec, SUM_ROWS_EXAMINED, SUM_ROWS_SENT, SUM_NO_INDEX_USED FROM performance_schema.events_statements_summary_by_digest WHERE SCHEMA_NAME NOT IN ('performance_schema','mysql') ORDER BY SUM_TIMER_WAIT DESC LIMIT 20"
 
-# ベンチ中に実行。手元から ssh -L 1080:localhost:1080 isu1 で開く
+# ベンチ中に実行。手元から ssh -L 1080:localhost:1080 isu1 で開く (ssh_config 雛形なら ssh isu1 だけで良い)
 pprof:
 	go tool pprof -http=0.0.0.0:1080 http://localhost:6060/debug/pprof/profile?seconds=60

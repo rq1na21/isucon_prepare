@@ -1,0 +1,27 @@
+# 手元の ~/.ssh/config に貼る。当日 IP が決まったら HostName を埋める
+# Host 名は Makefile の APP_HOSTS / ALL_HOSTS と揃える
+# User は isucon (deploy-app-all が /home/isucon/webapp で make を叩くため)
+
+Host isu1
+  HostName 0.0.0.0
+  # make pprof の Web UI を手元の http://localhost:1080 で見る
+  LocalForward 1080 localhost:1080
+
+Host isu2
+  HostName 0.0.0.0
+
+Host isu3
+  HostName 0.0.0.0
+
+Host isu*
+  User isucon
+  IdentityFile ~/.ssh/id_ed25519
+  # 毎回作り直されるサーバーなので known_hosts を汚さない
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  LogLevel ERROR
+  # 接続を使い回して deploy-all を速くする
+  ControlMaster auto
+  ControlPath ~/.ssh/cm-%r@%h:%p
+  ControlPersist 10m
+  ServerAliveInterval 30

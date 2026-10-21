@@ -3,7 +3,7 @@
 ## 最初の1時間
 - [ ] マニュアル・アプリ概要を読む (全員)
 - [ ] 初回ベンチを回してスコアを記録
-- [ ] `~/.ssh/config` に isu1〜3 を登録
+- [ ] `templates/ssh_config` を `~/.ssh/config` に貼り、HostName を埋める
 - [ ] 各サーバーで deploy key を作成し GitHub に登録 (`ssh-keygen -t ed25519`)
 - [ ] webapp を git 管理 → このリポジトリの Makefile / setup / templates をコピー
 - [ ] `make setup` → `make collect` → commit
@@ -50,5 +50,4 @@
 - [ ] 最終ベンチ
 
 ## 未対応 (必要になったら追加)
-- ssh config: 当日 IP が決まってから書く
 - pprotein / netdata: alp + pt-query-digest + pprof で足りない時に
